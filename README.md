@@ -1,2 +1,2 @@
 # vps_scripts
-some script for my vps
+This is some scripts for my VPS's use.
