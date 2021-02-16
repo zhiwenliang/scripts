@@ -35,6 +35,7 @@ function main() {
             exit 1
             ;;
         esac
+
     done
 }
 
