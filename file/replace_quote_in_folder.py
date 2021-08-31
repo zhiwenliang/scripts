@@ -9,8 +9,7 @@ def replce_in_folder(folder_path: str, str_old: str, str_new: str):
         for file in files:
             if (os.path.splitext(file)[1] in ext_list):
                 file_path = os.path.join(home, file)
-                file_list.append(file_path)
-                replace_in_file(file, str_old, str_new)
+                replace_in_file(file_path, str_old, str_new)
 
 
 def replace_in_file(file_old_path: str, str_old: str, str_new: str):
