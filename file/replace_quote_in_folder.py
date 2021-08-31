@@ -1,16 +1,16 @@
 import os
 from shutil import move
-import shutil
 
 
 def replce_in_folder(folder_path: str, str_old: str, str_new: str):
     file_list = []
+    ext_list = ['.md', '.txt']
     for home, dirs, files in os.walk(folder_path):
         for file in files:
-            file_path = os.path.join(home, file)
-            file_list.append(file_path)
-    for file in file_list:
-        replace_in_file(file, str_old, str_new)
+            if (os.path.splitext(file)[1] in ext_list):
+                file_path = os.path.join(home, file)
+                file_list.append(file_path)
+                replace_in_file(file, str_old, str_new)
 
 
 def replace_in_file(file_old_path: str, str_old: str, str_new: str):

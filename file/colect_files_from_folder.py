@@ -4,12 +4,9 @@ from typing import List
 
 
 def main(source_dir: str, des_dir: str, ext: str):
-    try:
-        files = list_file_with_ext(source_dir, ext)
-        for file in files:
-            shutil.copy(file, des_dir)
-    except Exception:
-        print("Some errors occur!")
+    files = list_file_with_ext(source_dir, ext)
+    for file in files:
+        shutil.copy(file, des_dir)
 
 
 # List all music files with path. Get file type by extension name.
