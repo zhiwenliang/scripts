@@ -15,7 +15,7 @@ def replce_in_folder(folder_path: str, str_old: str, str_new: str):
 def replace_in_file(file_old_path: str, str_old: str, str_new: str):
     file_tmp_path = file_old_path + '01'
     file_old = open(file_old_path, mode='r+', encoding='utf-8')
-    file_tmp = open(file_tmp_path, mode='w+', encoding='utf-8')
+    file_tmp = open(file_tmp_path, mode='w+', encoding='utf-8', newline='\n')
 
     data = file_old.readlines()
     for line in data:
