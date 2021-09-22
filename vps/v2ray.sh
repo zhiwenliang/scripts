@@ -6,7 +6,7 @@ bash install-release.sh &&
 curl -LO https://raw.githubusercontent.com/zhiwenliang/scripts/main/vps/config.json &&
 mv ~/config.json /usr/local/etc/v2ray/config.json && 
 apt-get update &&
-iptables -I INPUT -p tcp --dport 8888 -j ACCEPT &&
+iptables -I INPUT -p tcp --dport 6666 -j ACCEPT &&
 iptables-save &&
 netfilter-persistent save &&
 netfilter-persistent reload &&
