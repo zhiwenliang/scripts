@@ -62,11 +62,11 @@ func main() {
 func lottery(text string, count int) string {
 	arrs := strings.Split(text, "\n")
 	length := len(arrs)
-	indexs := generateRandomNumber(0, length, count)
+	indexs := generateRandomNumber(0, length-1, count)
 	var resultArr []string
 	for i := 0; i < count; i++ {
 		index := indexs[i]
-		value := string(rune(index)) + "--" + arrs[index]
+		value := arrs[index]
 		resultArr = append(resultArr, value)
 	}
 	result := strings.Join(resultArr, "\n")
