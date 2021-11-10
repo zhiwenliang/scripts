@@ -13,7 +13,7 @@ import time
 from requests.models import Response
 
 # common_header of request
-api_key = "6DHLLYUEN4ZN6RNFF75YQON26TWLNH4FP2KA"
+api_key = ""
 header = {"Authorization": "Bearer " + api_key}
 header_post = {
     "Authorization": "Bearer " + api_key,
@@ -71,14 +71,13 @@ def list_os():
 
 
 # Create a instance
-def create_instance(region, plan, enable_ipv6, os_id, sshkey_id):
-    params = {{
-        "region": "sjc",
-        "plan": "vc2-1c-1gb",
-        "enable_ipv6": True,
-        "os_id": 352,
-        "sshkey_id": "6504ef21-cf98-4212-b526-754c78630cfd"
-    }}
+def create_instance(region, plan, enable_ipv6, os_id):
+    params = {
+        "region": region,
+        "plan": plan,
+        "enable_ipv6": enable_ipv6,
+        "os_id": os_id,
+    }
     result = requests.post(url_instances, headers=header_post, params=params)
     json_text = pretty_json(result.text)
     return json_text
@@ -88,6 +87,7 @@ def destroy_instance(instance_id):
     delete_url = url_instances + "/" + instance_id
     requests.delete(delete_url, headers=header)
 
+# Install v2ray
 
-def install_v2ray():
-    
+# print(create_instance("nrt", "vc2-1c-1gb", True, 477))
+# print(list_os())
