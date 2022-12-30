@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# bash <(curl -s -L https://git.io/v2ray.sh)
 apt-get update &&
 apt install unzip iptables iptables-persistent -y
 curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh &&
