@@ -3,7 +3,7 @@ version: '1.0'
 services:
   image: jgraph/drawio
   container_name: drawio
-  port:
+  ports:
     - "8081:8080"
     - "8444:8443"
 
