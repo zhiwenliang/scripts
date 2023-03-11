@@ -8,8 +8,5 @@ services:
       - 27017:27017
     volumes:
       - /home/alpha/mongo-data:/data
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
 
 
