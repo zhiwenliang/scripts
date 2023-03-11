@@ -7,7 +7,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - /home/venus/mongo-data:/data/db
+      - /home/alpha/mongo-data:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
