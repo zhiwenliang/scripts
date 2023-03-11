@@ -1,0 +1,12 @@
+version: '1.0'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo-alpha
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
+
