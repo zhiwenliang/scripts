@@ -5,8 +5,8 @@ services:
     image: kanboard/kanboard
     container_name: kanboard-alpha
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
     volumes:
       - /home/ubuntu/kanboard/kanboard_data:/var/www/app/data
       - /home/ubuntu/kanboard/kanboard_plugins:/var/www/app/plugins
