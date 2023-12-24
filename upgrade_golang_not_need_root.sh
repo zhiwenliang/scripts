@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Get the latest version of Go available
-latest_version=$(curl -sL https://golang.org/VERSION?m=text)
+latest_version_curl=$(curl -sL https://golang.org/VERSION?m=text)
+latest_version=$(echo $latest_version_curl | cut -d' ' -f1)
 
 echo "latest version is $latest_version"
 
