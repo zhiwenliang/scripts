@@ -6,7 +6,6 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # set go environment
 
-
 # install sdkman
 curl -s "https://get.sdkman.io" | bash
 
@@ -16,9 +15,9 @@ sdk install mvnd
 sdk install gradle
 
 # dnf install
-sudo dnf install npm zip unzip gcc g++ make cmake vim meld foliate wireshark git gitg npm libreoffice curl calibre thunderbird
-# install software
-# install jetbrain-toolbox
+sudo dnf install npm zip unzip gcc g++ make cmake vim meld wireshark git libreoffice curl calibre thunderbird
+sudo npm install -g n
+sudo n stable
 
 # install vscode
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -28,9 +27,8 @@ sudo dnf install code
 
 # set vimrc
 
-
 # install chrome
-curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm 
+curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 
 # set git(user.name,user.email,core.autocrlf,init.defaultBranch)
 git config --global user.name zhiwen
@@ -38,13 +36,14 @@ git config --global user.email zhiwen_liang@outlook.com
 git config --global core.autocrlf=false
 git config --global init.defaultBranch=main
 
-# download telegram, geph, tor, postman, janetfilter-all
+# download telegram, tor, postman, janetfilter-all
 
 # generate ssh key
 
 # todo
+# install jetbrain-toolbox
 # install idea, andriod studio, datagrip, clion
 # update mvn repo
 # init android sdk
 # init datagrip connect jdbc
-# 
+#
