@@ -14,8 +14,8 @@ sdk install maven
 sdk install mvnd
 sdk install gradle
 
-# dnf install
-sudo dnf install npm zip unzip gcc g++ make cmake vim meld wireshark git libreoffice curl calibre thunderbird
+# dnf install some packages
+sudo dnf install npm zip unzip gcc g++ gdb make cmake vim meld wireshark git libreoffice curl calibre thunderbird libre-office
 sudo npm install -g n
 sudo n stable
 
@@ -29,6 +29,7 @@ sudo dnf install code
 
 # install chrome
 curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+sudo dnf install google-chrome-stable_current_x86_64.rpm
 
 # set git(user.name,user.email,core.autocrlf,init.defaultBranch)
 git config --global user.name zhiwen
@@ -40,10 +41,6 @@ git config --global init.defaultBranch=main
 
 # generate ssh key
 
-# todo
 # install jetbrain-toolbox
-# install idea, andriod studio, datagrip, clion
-# update mvn repo
-# init android sdk
-# init datagrip connect jdbc
+# install idea, andriod studio, datagrip, clion, pycharm, goland
 #
