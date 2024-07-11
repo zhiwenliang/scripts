@@ -29,6 +29,8 @@ upgrade() {
     # Remove downloaded file
     echo "Remove downloaded file"
     rm $latest_version.linux-amd64.tar.gz
+
+    hugo version
 }
 
 # Check if Go is installed on the system
@@ -43,7 +45,7 @@ current_version=$(go version | awk '{print $3}')
 
 echo "current version is $current_version"
 
-# Check if the current version is the same as the latest version
+# Check if the current version is same as the latest version
 if [ "$current_version" == "$latest_version" ]; then
     echo "Go is already up to date."
     exit 0
