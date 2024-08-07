@@ -16,6 +16,8 @@ upgrade() {
     # Remove downloaded file
     echo "Remove downloaded file"
     rm $file_name
+
+    hugo version
 }
 
 # Check if Go is installed on the system
