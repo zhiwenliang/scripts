@@ -1,1 +1,1 @@
-podman run -itd --name redis-demo -p 6379:6379 redis
+podman run -itd --name redis_1 -p 6379:6379 redis

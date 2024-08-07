@@ -30,7 +30,6 @@ upgrade() {
     echo "Remove downloaded file"
     rm $latest_version.linux-amd64.tar.gz
 
-    hugo version
 }
 
 # Check if Go is installed on the system
