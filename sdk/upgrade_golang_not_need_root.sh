@@ -14,6 +14,7 @@ upgrade() {
     # Extract the package
     echo "Extract the package"
     sudo tar -C /tmp -xzf $latest_version.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go
     sudo mv /tmp/go /usr/local
 
     # Set environment variables
