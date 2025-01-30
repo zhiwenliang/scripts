@@ -1,5 +1,37 @@
 #!/bin/bash
 
+upgrade_offline() {
+    # Download latest go version
+    echo "Download latest go version"
+
+    # Extract the package
+    echo "Extract the package"
+    sudo tar -C /tmp -xzf go*.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go
+    sudo mv /tmp/go /usr/local
+
+    # Set environment variables
+    # echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+    # echo 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin' >> ~/.bashrc
+    #
+    # source ~/.bashrc
+
+    # Verify the installation
+    echo "Verify the installation"
+    go version
+
+    # Remove downloaded file
+    echo "Remove downloaded file"
+    rm go*.linux-amd64.tar.gz
+
+}
+
+if [[ -n $1 && $1 == "offline" ]]; then
+    echo "Offline upgrade"
+    upgrade_offline
+    exit 0
+fi
+
 # Get the latest version of Go available
 latest_version_curl=$(curl -sL https://golang.org/VERSION?m=text)
 latest_version=$(echo $latest_version_curl | cut -d' ' -f1)
@@ -34,7 +66,7 @@ upgrade() {
 }
 
 # Check if Go is installed on the system
-if ! command -v go &> /dev/null; then
+if ! command -v go &>/dev/null; then
     echo "Go is not installed on your system. Install it first."
     upgrade
     exit 1
@@ -54,4 +86,5 @@ else
     echo "Remove existing go"
     sudo rm -rf /usr/local/go
     upgrade
+
 fi
