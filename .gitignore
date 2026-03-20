@@ -12,3 +12,10 @@
 __pycache__/
 *.pyc
 *.pyo
+
+# cursor
+.cursor/
+.cursorrules
+.cursorignore
+.cursorignorerules
+.cursorignorerules
