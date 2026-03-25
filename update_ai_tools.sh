@@ -48,6 +48,7 @@ update_tool_pipe "Claude Code" "https://claude.ai/install.sh"
 update_tool "Codex CLI" npm i -g @openai/codex@latest
 update_tool "Gemini CLI" npm i -g @google/gemini-cli@latest
 update_tool_pipe "OpenCode" "https://opencode.ai/install"
+update_tool "OpenClaw" openclaw update --yes
 
 echo "========================================"
 echo "  Summary: ${success_count} succeeded, ${fail_count} failed"

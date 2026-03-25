@@ -426,6 +426,13 @@ else
     ok "OpenCode installed"
 fi
 
+if command_exists openclaw; then
+    ok "OpenClaw already installed"
+else
+    npm i -g openclaw@latest
+    ok "OpenClaw installed"
+fi
+
 # -- JetBrains Toolbox -------------------------------------------------------
 
 info "Installing JetBrains Toolbox"
