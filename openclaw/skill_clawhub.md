@@ -9,6 +9,9 @@ https://clawhub.ai/ivangdavila/playwright
 https://clawhub.ai/ivangdavila/data-analysis
 https://clawhub.ai/guifav/web-scraper
 https://clawhub.ai/jk-0001/automation-workflows
+https://clawhub.ai/ivangdavila/excel-xlsx
+https://clawhub.ai/ivangdavila/word-docx
+https://clawhub.ai/ivangdavila/powerpoint-pptx
 
 ## News
 https://clawhub.ai/joargp/news-summary
