@@ -193,14 +193,6 @@ if ! command_exists helm; then
 fi
 ok "helm installed"
 
-if ! command_exists k9s; then
-    K9S_VER=$(curl -fsSL https://api.github.com/repos/derailed/k9s/releases/latest | grep -oP '"tag_name":\s*"\K[^"]+')
-    curl -fsSL "https://github.com/derailed/k9s/releases/download/${K9S_VER}/k9s_Linux_amd64.tar.gz" -o /tmp/k9s.tar.gz
-    sudo tar -C /usr/local/bin -xzf /tmp/k9s.tar.gz k9s
-    rm -f /tmp/k9s.tar.gz
-fi
-ok "k9s installed"
-
 # -- CLI productivity tools --------------------------------------------------
 
 info "Installing CLI productivity tools"
