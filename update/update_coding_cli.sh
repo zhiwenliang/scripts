@@ -205,6 +205,12 @@ update_npm_cli \
     "@google/gemini-cli" \
     "gemini --version | head -n1" \
     "npm install -g @google/gemini-cli@latest"
+update_npm_cli \
+    "OpenSpec" \
+    "openspec" \
+    "@fission-ai/openspec" \
+    "openspec --version" \
+    "npm install -g @fission-ai/openspec@latest"
 update_opencode
 
 print_summary
