@@ -254,6 +254,12 @@ if ! command_exists bun; then
 fi
 ok "Bun installed"
 
+if ! command_exists uv; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+ok "uv installed"
+
 if ! command_exists deno; then
     curl -fsSL https://deno.land/install.sh | sh
     if ! grep -q '.deno/bin' ~/.bashrc; then
