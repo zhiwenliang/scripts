@@ -136,9 +136,9 @@ update_claude_code() {
 }
 
 fetch_latest_opencode_version() {
-    curl -fsSL https://api.github.com/repos/sst/opencode/releases/latest \
-        | grep -m1 '"tag_name"' \
-        | sed -E 's/.*"v?([^"]+)".*/\1/'
+    local response
+    response="$(curl -fsSL https://api.github.com/repos/sst/opencode/releases/latest)"
+    echo "$response" | grep -m1 '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
 }
 
 update_opencode() {
