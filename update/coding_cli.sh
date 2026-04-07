@@ -175,6 +175,41 @@ update_opencode() {
     echo ""
 }
 
+update_spec_kit() {
+    local name="Spec-Kit"
+
+    log_step "Checking" "$name"
+
+    if ! command -v uv >/dev/null 2>&1; then
+        log_fail "uv is not installed (required for $name)"
+        track_failure "$name"
+        echo ""
+        return
+    fi
+
+    if command -v specify >/dev/null 2>&1; then
+        log_step "Updating" "$name"
+        if uv tool install specify-cli --from git+https://github.com/github/spec-kit.git --force; then
+            log_ok "$name updated successfully"
+            track_success
+        else
+            log_fail "$name update failed"
+            track_failure "$name"
+        fi
+    else
+        log_step "Installing" "$name"
+        if uv tool install specify-cli --from git+https://github.com/github/spec-kit.git; then
+            log_ok "$name installed successfully"
+            track_success
+        else
+            log_fail "$name install failed"
+            track_failure "$name"
+        fi
+    fi
+
+    echo ""
+}
+
 print_summary() {
     echo "========================================"
     echo "  Summary: ${success_count} updated, ${skip_count} skipped, ${fail_count} failed"
@@ -212,5 +247,6 @@ update_npm_cli \
     "openspec --version" \
     "npm install -g @fission-ai/openspec@latest"
 update_opencode
+update_spec_kit
 
 print_summary
