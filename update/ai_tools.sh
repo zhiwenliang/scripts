@@ -52,6 +52,18 @@ track_failure() {
     ((fail_count += 1))
 }
 
+fetch_latest_github_release_version() {
+    local repo="$1"
+    local release_url
+
+    release_url="$(
+        curl -fsSLI -o /dev/null -w '%{url_effective}' \
+            "https://github.com/${repo}/releases/latest"
+    )"
+
+    sed -E 's#.*/tag/v?([^/]+)$#\1#' <<<"$release_url"
+}
+
 update_npm_cli() {
     local name="$1"
     local command_name="$2"
@@ -136,9 +148,13 @@ update_claude_code() {
 }
 
 fetch_latest_opencode_version() {
-    local response
-    response="$(curl -fsSL https://api.github.com/repos/sst/opencode/releases/latest)"
-    echo "$response" | grep -m1 '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+    fetch_latest_github_release_version "sst/opencode"
+}
+
+run_opencode_installer() {
+    local version="$1"
+
+    curl -fsSL https://opencode.ai/install | "${INSTALLER_SHELL:-bash}" -s -- --version "$version"
 }
 
 update_opencode() {
@@ -164,7 +180,7 @@ update_opencode() {
     fi
 
     log_step "Updating" "$name via the official installer"
-    if curl -fsSL https://opencode.ai/install | bash; then
+    if run_opencode_installer "$latest_version"; then
         log_ok "$name is now at $(normalize_version "$(opencode --version | awk '{print $1}')")"
         track_success
     else
@@ -176,9 +192,7 @@ update_opencode() {
 }
 
 fetch_latest_speckit_version() {
-    local response
-    response="$(curl -fsSL https://api.github.com/repos/github/spec-kit/tags)"
-    echo "$response" | grep -m1 '"name"' | sed -E 's/.*"v?([^"]+)".*/\1/'
+    fetch_latest_github_release_version "github/spec-kit"
 }
 
 update_spec_kit() {
@@ -246,31 +260,37 @@ print_summary() {
     echo "========================================"
 }
 
-echo "========================================"
-echo "  AI Tools Updater"
-echo "========================================"
-echo ""
+main() {
+    echo "========================================"
+    echo "  AI Tools Updater"
+    echo "========================================"
+    echo ""
 
-update_claude_code
-update_npm_cli \
-    "Codex CLI" \
-    "codex" \
-    "@openai/codex" \
-    "codex --version 2>/dev/null | awk '{print \$2}'" \
-    "npm install -g @openai/codex@latest"
-update_npm_cli \
-    "Gemini CLI" \
-    "gemini" \
-    "@google/gemini-cli" \
-    "gemini --version | head -n1" \
-    "npm install -g @google/gemini-cli@latest"
-update_opencode
-update_npm_cli \
-    "OpenSpec" \
-    "openspec" \
-    "@fission-ai/openspec" \
-    "openspec --version" \
-    "npm install -g @fission-ai/openspec@latest"
-update_spec_kit
+    update_claude_code
+    update_npm_cli \
+        "Codex CLI" \
+        "codex" \
+        "@openai/codex" \
+        "codex --version 2>/dev/null | awk '{print \$2}'" \
+        "npm install -g @openai/codex@latest"
+    update_npm_cli \
+        "Gemini CLI" \
+        "gemini" \
+        "@google/gemini-cli" \
+        "gemini --version | head -n1" \
+        "npm install -g @google/gemini-cli@latest"
+    update_opencode
+    update_npm_cli \
+        "OpenSpec" \
+        "openspec" \
+        "@fission-ai/openspec" \
+        "openspec --version" \
+        "npm install -g @fission-ai/openspec@latest"
+    update_spec_kit
 
-print_summary
+    print_summary
+}
+
+if [[ "${AI_TOOLS_LIB_ONLY:-0}" != "1" ]]; then
+    main "$@"
+fi
