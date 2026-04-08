@@ -247,7 +247,7 @@ print_summary() {
 }
 
 echo "========================================"
-echo "  AI Coding CLI Updater"
+echo "  AI Tools Updater"
 echo "========================================"
 echo ""
 
