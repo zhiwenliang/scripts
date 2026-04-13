@@ -274,6 +274,12 @@ main() {
         "codex --version 2>/dev/null | awk '{print \$2}'" \
         "npm install -g @openai/codex@latest"
     update_npm_cli \
+        "GitHub Copilot CLI" \
+        "copilot" \
+        "@github/copilot" \
+        "copilot version 2>/dev/null | grep -Eo '[0-9]+(\\.[0-9]+)+' | head -n1" \
+        "npm_config_ignore_scripts=false npm install -g @github/copilot@latest"
+    update_npm_cli \
         "Gemini CLI" \
         "gemini" \
         "@google/gemini-cli" \
