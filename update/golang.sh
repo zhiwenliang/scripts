@@ -2,20 +2,19 @@
 
 set -euo pipefail
 
-GO_PLATFORM="linux-amd64"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/common.sh"
 
-normalize_version() {
-    local version="$1"
-    version="${version#v}"
-    version="${version#go}"
-    echo "${version%%[^0-9.]*}"
-}
-
-version_lt() {
-    local left="$1"
-    local right="$2"
-    [[ "$(printf '%s\n%s\n' "$left" "$right" | sort -V | head -n1)" == "$left" && "$left" != "$right" ]]
-}
+GO_ARCH="$(uname -m)"
+case "$GO_ARCH" in
+    x86_64) GO_ARCH="amd64" ;;
+    aarch64) GO_ARCH="arm64" ;;
+    *)
+        echo "Unsupported architecture: $GO_ARCH" >&2
+        exit 1
+        ;;
+esac
+GO_PLATFORM="linux-${GO_ARCH}"
 
 fetch_latest_go_version() {
     curl -fsSL https://go.dev/VERSION?m=text | head -n1
@@ -53,14 +52,14 @@ upgrade_offline() {
     local archive_version
     local current_version="not installed"
 
-    archive_path="$(find . -maxdepth 1 -type f -name 'go*.linux-amd64.tar.gz' | sort -V | tail -n1)"
+    archive_path="$(find . -maxdepth 1 -type f -name "go*.${GO_PLATFORM}.tar.gz" | sort -V | tail -n1)"
     if [[ -z "${archive_path}" ]]; then
-        echo "No local Go archive found matching go*.linux-amd64.tar.gz"
+        echo "No local Go archive found matching go*.${GO_PLATFORM}.tar.gz"
         exit 1
     fi
 
     archive_name="$(basename "$archive_path")"
-    archive_version="$(normalize_version "${archive_name%.linux-amd64.tar.gz}")"
+    archive_version="$(normalize_version "${archive_name%.${GO_PLATFORM}.tar.gz}")"
 
     if command -v go >/dev/null 2>&1; then
         current_version="$(normalize_version "$(current_go_version)")"
