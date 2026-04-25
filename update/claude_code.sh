@@ -28,23 +28,17 @@ update_claude_code() {
     fi
 
     if command -v claude >/dev/null 2>&1; then
-        log_step "Updating" "$name with claude update"
-        if claude update; then
-            log_ok "$name is now at $(normalize_version "$(claude --version | awk '{print $1}')")"
-            track_success
-        else
-            log_fail "$name update failed"
-            track_failure "$name"
-        fi
+        log_step "Updating" "$name via the official installer"
     else
         log_step "Installing" "$name via the official installer"
-        if curl -fsSL https://claude.ai/install.sh | bash; then
-            log_ok "$name installed successfully"
-            track_success
-        else
-            log_fail "$name install failed"
-            track_failure "$name"
-        fi
+    fi
+
+    if curl -fsSL https://claude.ai/install.sh | bash; then
+        log_ok "$name is now at $(normalize_version "$(claude --version | awk '{print $1}')")"
+        track_success
+    else
+        log_fail "$name install failed"
+        track_failure "$name"
     fi
 
     echo ""
