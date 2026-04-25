@@ -2,21 +2,11 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/common.sh"
+
 HUGO_REPO="gohugoio/hugo"
 HUGO_ARCHIVE_PATTERN="hugo_extended_%s_linux-amd64.tar.gz"
-
-normalize_version() {
-    local version="$1"
-    version="${version#v}"
-    version="${version#go}"
-    echo "${version%%[^0-9.]*}"
-}
-
-version_lt() {
-    local left="$1"
-    local right="$2"
-    [[ "$(printf '%s\n%s\n' "$left" "$right" | sort -V | head -n1)" == "$left" && "$left" != "$right" ]]
-}
 
 fetch_latest_hugo_version() {
     curl -fsSL "https://api.github.com/repos/${HUGO_REPO}/releases/latest" \
