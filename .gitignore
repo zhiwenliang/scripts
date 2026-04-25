@@ -1,5 +1,6 @@
 .shiftengine
 .DS_Store
+.worktrees/
 
 # IDE
 .idea/
