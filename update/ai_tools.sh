@@ -13,6 +13,7 @@ source "${SCRIPT_DIR}/gemini.sh"
 source "${SCRIPT_DIR}/opencode.sh"
 source "${SCRIPT_DIR}/openspec.sh"
 source "${SCRIPT_DIR}/spec_kit.sh"
+source "${SCRIPT_DIR}/uipro.sh"
 
 main() {
     echo "========================================"
@@ -27,6 +28,7 @@ main() {
     update_opencode
     update_openspec
     update_spec_kit
+    update_uipro
 
     print_summary
 }
