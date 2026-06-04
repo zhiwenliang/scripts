@@ -12,6 +12,7 @@ source "${SCRIPT_DIR}/copilot.sh"
 source "${SCRIPT_DIR}/gemini.sh"
 source "${SCRIPT_DIR}/opencode.sh"
 source "${SCRIPT_DIR}/openspec.sh"
+source "${SCRIPT_DIR}/pi.sh"
 source "${SCRIPT_DIR}/spec_kit.sh"
 source "${SCRIPT_DIR}/uipro.sh"
 
@@ -27,6 +28,7 @@ main() {
     update_gemini
     update_opencode
     update_openspec
+    update_pi
     update_spec_kit
     update_uipro
 
