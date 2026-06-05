@@ -13,7 +13,7 @@ update_hermes() {
     log_step "Checking" "$name"
 
     if command -v hermes >/dev/null 2>&1; then
-        current_version="$(hermes --version 2>/dev/null | head -n1 | awk '{print $2}' || echo "unknown")"
+        current_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
         action="Updating"
     fi
 
@@ -22,7 +22,7 @@ update_hermes() {
     if [[ "$current_version" == "not installed" ]]; then
         log_step "$action" "$name via official installer"
         if curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash; then
-            local new_version="$(hermes --version 2>/dev/null | head -n1 | awk '{print $2}' || echo "unknown")"
+            local new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
             log_ok "$name is now at ${new_version}"
             track_success
         else
@@ -32,7 +32,7 @@ update_hermes() {
     else
         log_step "$action" "$name"
         if hermes update; then
-            local new_version="$(hermes --version 2>/dev/null | head -n1 | awk '{print $2}' || echo "unknown")"
+            local new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
             log_ok "$name is now at ${new_version}"
             track_success
         else
