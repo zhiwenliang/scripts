@@ -31,7 +31,11 @@ update_hermes() {
         fi
     else
         log_step "$action" "$name"
-        if hermes update; then
+        # --yes: never block on interactive prompts (config migration / stash
+        # restore). A bare `hermes update` can sit forever waiting on stdin,
+        # which looks like a hang. The heavy phase is a silent `npm install`
+        # of the JS workspace; it emits no output but is not stuck.
+        if hermes update --yes; then
             local new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
             log_ok "$name is now at ${new_version}"
             track_success
