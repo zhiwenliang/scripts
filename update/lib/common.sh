@@ -72,12 +72,20 @@ update_npm_cli() {
     local install_cmd="$5"
     local latest_version
     local current_version="not installed"
+    local command_path=""
+    local target_prefix=""
 
     log_step "Checking" "$name"
     latest_version="$(normalize_version "$(npm view "$package_name" version --silent)")"
 
     if command -v "$command_name" >/dev/null 2>&1; then
         current_version="$(normalize_version "$(eval "$current_cmd")")"
+        # Install into the prefix that owns the binary currently on PATH, so the
+        # update replaces the binary the user actually runs. Without this, npm's
+        # global prefix may differ from PATH (e.g. a hermes node vs an nvm node),
+        # leaving the update applied to a copy that is never executed.
+        command_path="$(command -v "$command_name")"
+        target_prefix="$(dirname "$(dirname "$command_path")")"
     fi
 
     echo "Current version: ${current_version}"
@@ -91,12 +99,19 @@ update_npm_cli() {
     fi
 
     log_step "Updating" "$name"
+    if [[ -n "$target_prefix" ]]; then
+        echo "Install prefix:  ${target_prefix}"
+        export npm_config_prefix="$target_prefix"
+    fi
     if eval "$install_cmd"; then
         log_ok "$name is now at $(normalize_version "$(eval "$current_cmd")")"
         track_success
     else
         log_fail "$name update failed"
         track_failure "$name"
+    fi
+    if [[ -n "$target_prefix" ]]; then
+        unset npm_config_prefix
     fi
 
     echo ""
