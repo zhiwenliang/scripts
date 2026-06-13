@@ -183,8 +183,8 @@ main() {
         redraw_menu
     done
 
+    printf '\033[%dA\033[J' "${#MENU_ITEMS[@]}"
     show_cursor
-    echo ""
     run_selected
 }
 
