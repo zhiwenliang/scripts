@@ -10,6 +10,7 @@ There is no package build step. Run scripts directly with Bash:
 bash init/init_fedora.sh
 bash init/init_ubuntu.sh
 bash update/ai_tools.sh
+bash update/tui.sh
 bash update/golang.sh
 bash update/hugo.sh
 ```
@@ -20,6 +21,7 @@ Validate shell syntax before committing:
 bash -n init/init_fedora.sh
 bash -n init/init_ubuntu.sh
 bash -n update/ai_tools.sh
+bash -n update/tui.sh
 bash -n update/golang.sh
 bash -n update/hugo.sh
 bash -n update/lib/common.sh
