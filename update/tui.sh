@@ -141,10 +141,31 @@ run_selected() {
     print_summary
 }
 
+select_all() {
+    local i
+    for i in "${!selected[@]}"; do
+        selected[$i]=1
+    done
+}
+
 main() {
+    case "${1:-}" in
+        -a|--all)
+            select_all
+            run_selected
+            return
+            ;;
+        -h|--help)
+            echo "Usage: update/tui.sh [--all]"
+            echo "  (no args)   interactive checkbox menu"
+            echo "  -a, --all   update everything, no menu (works non-interactively)"
+            exit 0
+            ;;
+    esac
+
     if [[ ! -t 0 || ! -t 1 ]]; then
         echo "update/tui.sh needs an interactive terminal." >&2
-        echo "For non-interactive updates, run: bash update/ai_tools.sh" >&2
+        echo "For non-interactive updates, run: bash update/tui.sh --all" >&2
         exit 1
     fi
 

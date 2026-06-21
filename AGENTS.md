@@ -11,6 +11,7 @@ bash init/init_fedora.sh
 bash init/init_ubuntu.sh
 bash update/ai_tools.sh
 bash update/tui.sh
+bash update/tui.sh --all
 bash update/golang.sh
 bash update/hugo.sh
 ```
