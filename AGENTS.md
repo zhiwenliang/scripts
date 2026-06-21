@@ -1,14 +1,14 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository is a small collection of standalone Linux utility scripts and config files. Group initialization scripts under [`init/`](/home/alpha/scripts/init), for example [`init_fedora.sh`](/home/alpha/scripts/init/init_fedora.sh) and [`init_ubuntu.sh`](/home/alpha/scripts/init/init_ubuntu.sh). Group update automation under [`update/`](/home/alpha/scripts/update), for example [`ai_tools.sh`](/home/alpha/scripts/update/ai_tools.sh), [`golang.sh`](/home/alpha/scripts/update/golang.sh), and [`hugo.sh`](/home/alpha/scripts/update/hugo.sh), with shared helpers in [`update/lib/common.sh`](/home/alpha/scripts/update/lib/common.sh). Store related assets in focused subdirectories: `clash/` for Mihomo YAML configs and `openclaw/` for project-specific notes such as `skill_clawhub.md`.
+This repository is a small collection of standalone Linux utility scripts and config files. Group initialization scripts under [`init/`](/home/alpha/scripts/init), for example [`fedora.sh`](/home/alpha/scripts/init/fedora.sh) and [`ubuntu.sh`](/home/alpha/scripts/init/ubuntu.sh). Group update automation under [`update/`](/home/alpha/scripts/update), for example [`ai_tools.sh`](/home/alpha/scripts/update/ai_tools.sh), [`golang.sh`](/home/alpha/scripts/update/golang.sh), and [`hugo.sh`](/home/alpha/scripts/update/hugo.sh), with shared helpers in [`update/lib/common.sh`](/home/alpha/scripts/update/lib/common.sh). Store related assets in focused subdirectories: `clash/` for Mihomo YAML configs and `docs/superpowers/` for design specs and implementation plans.
 
 ## Build, Test, and Development Commands
 There is no package build step. Run scripts directly with Bash:
 
 ```bash
-bash init/init_fedora.sh
-bash init/init_ubuntu.sh
+bash init/fedora.sh
+bash init/ubuntu.sh
 bash update/ai_tools.sh
 bash update/tui.sh
 bash update/tui.sh --all
@@ -19,8 +19,8 @@ bash update/hugo.sh
 Validate shell syntax before committing:
 
 ```bash
-bash -n init/init_fedora.sh
-bash -n init/init_ubuntu.sh
+bash -n init/fedora.sh
+bash -n init/ubuntu.sh
 bash -n update/ai_tools.sh
 bash -n update/tui.sh
 bash -n update/golang.sh
@@ -37,7 +37,7 @@ Use Bash for shell automation, start files with `#!/bin/bash`, and prefer `set -
 This repository does not have an automated test suite. Contributors should treat syntax checks and safe dry-runs as the baseline. For scripts that download or install software, test only the affected path and document assumptions in the PR. For config changes under `clash/`, verify YAML parses cleanly in the target tool before merging.
 
 ## Commit & Pull Request Guidelines
-Keep commit subjects short, imperative, and scoped to one change, matching recent history such as `update clawhub skill` or `Refactor init/init_fedora.sh for enhanced logging and error handling`. Prefer one logical script or config change per commit. PRs should include:
+Keep commit subjects short, imperative, and scoped to one change, matching recent history such as `add interactive TUI for update scripts` or `clear menu before running selected updates`. Prefer one logical script or config change per commit. PRs should include:
 
 - What changed and why
 - Any commands used for validation
