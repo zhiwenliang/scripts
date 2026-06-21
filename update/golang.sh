@@ -59,7 +59,7 @@ upgrade_offline() {
     fi
 
     archive_name="$(basename "$archive_path")"
-    archive_version="$(normalize_version "${archive_name%.${GO_PLATFORM}.tar.gz}")"
+    archive_version="$(normalize_version "${archive_name%".${GO_PLATFORM}.tar.gz"}")"
 
     if command -v go >/dev/null 2>&1; then
         current_version="$(normalize_version "$(current_go_version)")"

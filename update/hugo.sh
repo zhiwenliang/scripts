@@ -16,7 +16,7 @@ install_hugo_release() {
     local archive_name="hugo_extended_${version}_linux-amd64.tar.gz"
     local temp_dir
     temp_dir="$(mktemp -d)"
-    trap "rm -rf '$temp_dir'" EXIT
+    trap 'rm -rf "$temp_dir"' EXIT
 
     log_step "Downloading" "$archive_name"
     curl -fsSL "https://github.com/${HUGO_REPO}/releases/download/v${version}/${archive_name}" \

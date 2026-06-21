@@ -22,7 +22,8 @@ update_hermes() {
     if [[ "$current_version" == "not installed" ]]; then
         log_step "$action" "$name via official installer"
         if curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash; then
-            local new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
+            local new_version
+            new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
             log_ok "$name is now at ${new_version}"
             track_success
         else
@@ -36,7 +37,8 @@ update_hermes() {
         # which looks like a hang. The heavy phase is a silent `npm install`
         # of the JS workspace; it emits no output but is not stuck.
         if hermes update --yes; then
-            local new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
+            local new_version
+            new_version="$(hermes --version 2>/dev/null | head -n1 | grep -oE 'v[0-9]+(\.[0-9]+)*' || echo "unknown")"
             log_ok "$name is now at ${new_version}"
             track_success
         else
