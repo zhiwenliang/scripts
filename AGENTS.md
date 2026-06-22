@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository is a small collection of standalone Linux utility scripts and config files. Group initialization scripts under [`init/`](/home/alpha/scripts/init), for example [`fedora.sh`](/home/alpha/scripts/init/fedora.sh) and [`ubuntu.sh`](/home/alpha/scripts/init/ubuntu.sh). Group update automation under [`update/`](/home/alpha/scripts/update), for example [`ai_tools.sh`](/home/alpha/scripts/update/ai_tools.sh), [`golang.sh`](/home/alpha/scripts/update/golang.sh), and [`hugo.sh`](/home/alpha/scripts/update/hugo.sh), with shared helpers in [`update/lib/common.sh`](/home/alpha/scripts/update/lib/common.sh). Store related assets in focused subdirectories: `clash/` for Mihomo YAML configs and `docs/superpowers/` for design specs and implementation plans.
+This repository is a small collection of standalone Linux utility scripts and config files. Group initialization scripts under [`init/`](/home/alpha/scripts/init), for example [`fedora.sh`](/home/alpha/scripts/init/fedora.sh) and [`ubuntu.sh`](/home/alpha/scripts/init/ubuntu.sh). Group update automation under [`update/`](/home/alpha/scripts/update), for example [`ai_tools.sh`](/home/alpha/scripts/update/ai_tools.sh), [`golang.sh`](/home/alpha/scripts/update/golang.sh), and [`hugo.sh`](/home/alpha/scripts/update/hugo.sh), with shared helpers in [`update/lib/common.sh`](/home/alpha/scripts/update/lib/common.sh). Store related assets in focused subdirectories: `clash/` for Mihomo YAML configs.
 
 ## Build, Test, and Development Commands
 There is no package build step. Run scripts directly with Bash:
