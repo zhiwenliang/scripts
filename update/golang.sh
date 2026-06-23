@@ -5,16 +5,35 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 
+# Detect the host OS and architecture before downloading, so the platform
+# string matches the running system instead of assuming linux/amd64.
+GO_OS="$(uname -s)"
+case "$GO_OS" in
+    Linux) GO_OS="linux" ;;
+    Darwin) GO_OS="darwin" ;;
+    *)
+        echo "Unsupported operating system: $GO_OS" >&2
+        exit 1
+        ;;
+esac
+
 GO_ARCH="$(uname -m)"
 case "$GO_ARCH" in
-    x86_64) GO_ARCH="amd64" ;;
-    aarch64) GO_ARCH="arm64" ;;
+    x86_64 | amd64) GO_ARCH="amd64" ;;
+    aarch64 | arm64) GO_ARCH="arm64" ;;
+    armv6l | armv7l | arm) GO_ARCH="armv6l" ;;
+    i386 | i686) GO_ARCH="386" ;;
+    ppc64le) GO_ARCH="ppc64le" ;;
+    s390x) GO_ARCH="s390x" ;;
+    riscv64) GO_ARCH="riscv64" ;;
     *)
         echo "Unsupported architecture: $GO_ARCH" >&2
         exit 1
         ;;
 esac
-GO_PLATFORM="linux-${GO_ARCH}"
+
+GO_PLATFORM="${GO_OS}-${GO_ARCH}"
+echo "Detected platform: ${GO_PLATFORM}"
 
 fetch_latest_go_version() {
     curl -fsSL https://go.dev/VERSION?m=text | head -n1
