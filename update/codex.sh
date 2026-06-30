@@ -16,7 +16,7 @@ current_codex_version() {
 }
 
 run_codex_installer() {
-    curl -fsSL "$CODEX_INSTALLER_URL" | bash
+    curl -fsSL "$CODEX_INSTALLER_URL" | CODEX_NON_INTERACTIVE=1 sh
 }
 
 update_codex() {

@@ -443,7 +443,7 @@ fi
 if command_exists codex; then
     ok "Codex CLI already installed"
 else
-    curl -fsSL https://chatgpt.com/codex/install.sh | bash
+    curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh
     ok "Codex CLI installed"
 fi
 

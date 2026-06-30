@@ -345,6 +345,17 @@ test_codex_uses_official_release_tag() {
     rm -rf "$tmp_dir"
 }
 
+test_codex_installers_use_documented_non_interactive_mode() {
+    local repo_root
+
+    repo_root="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+    grep -q 'curl -fsSL "$CODEX_INSTALLER_URL" | CODEX_NON_INTERACTIVE=1 sh' "${SCRIPT_DIR}/codex.sh" \
+        || fail "Codex updater should use the documented non-interactive installer mode"
+    grep -q 'curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh' "${repo_root}/init/fedora.sh" \
+        || fail "Linux bootstrap should use the documented non-interactive Codex installer mode"
+}
+
 test_hugo_uses_detected_linux_arch() {
     grep -q 'hugo_release_arch' "${SCRIPT_DIR}/hugo.sh" || fail "expected Hugo updater to detect release architecture"
     ! grep -q 'hugo_extended_.*linux-amd64' "${SCRIPT_DIR}/hugo.sh" || fail "Hugo updater still hard-codes linux-amd64"
@@ -374,6 +385,7 @@ main() {
     test_removed_hermes_and_openclaw_without_removing_opencode
     test_opencode_uses_current_repo_slug
     test_codex_uses_official_release_tag
+    test_codex_installers_use_documented_non_interactive_mode
     test_hugo_uses_detected_linux_arch
     test_init_scripts_avoid_stale_linux_assets
     echo "All update script tests passed."

@@ -1,22 +1,33 @@
+# Local workspace
 .shiftengine
 .DS_Store
 .worktrees/
 
-# IDE
+# Editor and tool state
 .idea/
 .vscode/
-*.swp
-*.swo
-*~
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-
-# cursor
 .cursor/
 .cursorrules
 .cursorignore
 .cursorignorerules
-.cursorignorerules
+**/.claude/settings.local.json
+
+# Swap and backup files
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Runtime output
+*.log
+*.tmp
+
+# Local environment
+.env
+.env.*
+!.env.example
