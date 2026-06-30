@@ -12,6 +12,7 @@ fetch_latest_speckit_version() {
 update_spec_kit() {
     local name="Spec-Kit"
     local latest_version
+    local latest_version_raw
     local current_version="not installed"
 
     log_step "Checking" "$name"
@@ -23,7 +24,19 @@ update_spec_kit() {
         return
     fi
 
-    latest_version="$(normalize_version "$(fetch_latest_speckit_version)")"
+    if ! latest_version_raw="$(fetch_latest_speckit_version)"; then
+        log_fail "$name latest version lookup failed"
+        track_failure "$name"
+        echo ""
+        return
+    fi
+    latest_version="$(normalize_version "$latest_version_raw")"
+    if [[ -z "$latest_version" ]]; then
+        log_fail "$name latest version lookup failed"
+        track_failure "$name"
+        echo ""
+        return
+    fi
 
     if command -v specify >/dev/null 2>&1; then
         current_version="$(normalize_version "$(uv tool list 2>/dev/null | grep '^specify-cli' | awk '{print $2}')")"

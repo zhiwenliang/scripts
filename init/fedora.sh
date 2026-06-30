@@ -15,6 +15,35 @@ ok()    { printf '\033[1;32m[OK]\033[0m    %s\n' "$*"; }
 
 command_exists() { command -v "$1" &>/dev/null; }
 
+detect_machine_arch() {
+    local machine="${1:-$(uname -m)}"
+
+    case "$machine" in
+        x86_64|amd64)
+            GO_ARCH="amd64"
+            KUBECTL_ARCH="amd64"
+            GNU_ARCH="x86_64"
+            LAZYGIT_ARCH="x86_64"
+            PROTOC_ARCH="x86_64"
+            MINICONDA_ARCH="x86_64"
+            CHROME_LINUX_SUPPORTED="1"
+            ;;
+        aarch64|arm64)
+            GO_ARCH="arm64"
+            KUBECTL_ARCH="arm64"
+            GNU_ARCH="aarch64"
+            LAZYGIT_ARCH="arm64"
+            PROTOC_ARCH="aarch_64"
+            MINICONDA_ARCH="aarch64"
+            CHROME_LINUX_SUPPORTED="0"
+            ;;
+        *)
+            echo "Unsupported architecture: $machine" >&2
+            exit 1
+            ;;
+    esac
+}
+
 # -- Distro detection --------------------------------------------------------
 
 detect_distro() {
@@ -44,6 +73,7 @@ detect_distro() {
 }
 
 detect_distro
+detect_machine_arch
 
 # -- System update -----------------------------------------------------------
 
@@ -64,7 +94,11 @@ COMMON_PKGS=(
 )
 
 FEDORA_PKGS=( gcc-c++ npm )
-DEBIAN_PKGS=( g++ npm )
+DEBIAN_PKGS=(
+    g++ npm
+    software-properties-common apt-transport-https ca-certificates gnupg lsb-release
+    build-essential pkg-config
+)
 
 case "$DISTRO_ID" in
     fedora)       $PKG_INSTALL "${COMMON_PKGS[@]}" "${FEDORA_PKGS[@]}" ;;
@@ -87,7 +121,7 @@ if command_exists go; then
     ok "Go already installed: $(go version)"
 else
     GO_LATEST=$(curl -fsSL 'https://go.dev/dl/?mode=json' | grep -oP '"version":\s*"go\K[0-9]+\.[0-9]+\.[0-9]+"' | head -1 | tr -d '"')
-    GO_TAR="go${GO_LATEST}.linux-amd64.tar.gz"
+    GO_TAR="go${GO_LATEST}.linux-${GO_ARCH}.tar.gz"
     curl -fsSL "https://go.dev/dl/${GO_TAR}" -o "/tmp/${GO_TAR}"
     sudo rm -rf /usr/local/go
     sudo tar -C /usr/local -xzf "/tmp/${GO_TAR}"
@@ -149,7 +183,7 @@ info "Installing Miniconda"
 if command_exists conda; then
     ok "Conda already installed: $(conda --version)"
 else
-    curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh
+    curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-${MINICONDA_ARCH}.sh" -o /tmp/miniconda.sh
     bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
     rm -f /tmp/miniconda.sh
 
@@ -182,11 +216,12 @@ info "Installing Kubernetes tools"
 
 if ! command_exists kubectl; then
     KUBECTL_VER=$(curl -fsSL https://dl.k8s.io/release/stable.txt)
-    curl -fsSL "https://dl.k8s.io/release/${KUBECTL_VER}/bin/linux/amd64/kubectl" -o /tmp/kubectl
+    curl -fsSL "https://dl.k8s.io/release/${KUBECTL_VER}/bin/linux/${KUBECTL_ARCH}/kubectl" -o /tmp/kubectl
     sudo install -o root -g root -m 0755 /tmp/kubectl /usr/local/bin/kubectl
     rm -f /tmp/kubectl
 fi
-ok "kubectl $(kubectl version --client --short 2>/dev/null || echo 'installed')"
+KUBECTL_CLIENT_VERSION="$(kubectl version --client 2>/dev/null | head -n1 || true)"
+ok "kubectl ${KUBECTL_CLIENT_VERSION:-installed}"
 
 if ! command_exists helm; then
     curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -205,7 +240,7 @@ case "$DISTRO_ID" in
         $PKG_INSTALL zsh fzf ripgrep bat fd-find jq htop
         if ! command_exists eza; then
             EZA_VER=$(curl -fsSL https://api.github.com/repos/eza-community/eza/releases/latest | grep -oP '"tag_name":\s*"\K[^"]+')
-            curl -fsSL "https://github.com/eza-community/eza/releases/download/${EZA_VER}/eza_x86_64-unknown-linux-gnu.tar.gz" -o /tmp/eza.tar.gz
+            curl -fsSL "https://github.com/eza-community/eza/releases/download/${EZA_VER}/eza_${GNU_ARCH}-unknown-linux-gnu.tar.gz" -o /tmp/eza.tar.gz
             sudo tar -C /usr/local/bin -xzf /tmp/eza.tar.gz
             rm -f /tmp/eza.tar.gz
         fi
@@ -214,7 +249,7 @@ esac
 
 if ! command_exists lazygit; then
     LG_VER=$(curl -fsSL https://api.github.com/repos/jesseduffield/lazygit/releases/latest | grep -oP '"tag_name":\s*"v\K[^"]+')
-    curl -fsSL "https://github.com/jesseduffield/lazygit/releases/download/v${LG_VER}/lazygit_${LG_VER}_Linux_x86_64.tar.gz" -o /tmp/lazygit.tar.gz
+    curl -fsSL "https://github.com/jesseduffield/lazygit/releases/download/v${LG_VER}/lazygit_${LG_VER}_linux_${LAZYGIT_ARCH}.tar.gz" -o /tmp/lazygit.tar.gz
     sudo tar -C /usr/local/bin -xzf /tmp/lazygit.tar.gz lazygit
     rm -f /tmp/lazygit.tar.gz
 fi
@@ -285,7 +320,7 @@ if ! command_exists just; then
         fedora) $PKG_INSTALL just ;;
         ubuntu|debian|linuxmint|pop)
             JUST_VER=$(curl -fsSL https://api.github.com/repos/casey/just/releases/latest | grep -oP '"tag_name":\s*"\K[^"]+')
-            curl -fsSL "https://github.com/casey/just/releases/download/${JUST_VER}/just-${JUST_VER}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/just.tar.gz
+            curl -fsSL "https://github.com/casey/just/releases/download/${JUST_VER}/just-${JUST_VER}-${GNU_ARCH}-unknown-linux-musl.tar.gz" -o /tmp/just.tar.gz
             sudo tar -C /usr/local/bin -xzf /tmp/just.tar.gz just
             rm -f /tmp/just.tar.gz
             ;;
@@ -295,7 +330,7 @@ ok "just installed"
 
 if ! command_exists protoc; then
     PROTOC_VER=$(curl -fsSL https://api.github.com/repos/protocolbuffers/protobuf/releases/latest | grep -oP '"tag_name":\s*"v\K[^"]+')
-    curl -fsSL "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VER}/protoc-${PROTOC_VER}-linux-x86_64.zip" -o /tmp/protoc.zip
+    curl -fsSL "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VER}/protoc-${PROTOC_VER}-linux-${PROTOC_ARCH}.zip" -o /tmp/protoc.zip
     sudo unzip -o /tmp/protoc.zip -d /usr/local bin/protoc 'include/*'
     rm -f /tmp/protoc.zip
 fi
@@ -306,9 +341,9 @@ if ! command_exists xh; then
         fedora) $PKG_INSTALL xh ;;
         ubuntu|debian|linuxmint|pop)
             XH_VER=$(curl -fsSL https://api.github.com/repos/ducaale/xh/releases/latest | grep -oP '"tag_name":\s*"v\K[^"]+')
-            curl -fsSL "https://github.com/ducaale/xh/releases/download/v${XH_VER}/xh-v${XH_VER}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/xh.tar.gz
+            curl -fsSL "https://github.com/ducaale/xh/releases/download/v${XH_VER}/xh-v${XH_VER}-${GNU_ARCH}-unknown-linux-musl.tar.gz" -o /tmp/xh.tar.gz
             tar -xzf /tmp/xh.tar.gz -C /tmp
-            sudo install -m 0755 "/tmp/xh-v${XH_VER}-x86_64-unknown-linux-musl/xh" /usr/local/bin/xh
+            sudo install -m 0755 "/tmp/xh-v${XH_VER}-${GNU_ARCH}-unknown-linux-musl/xh" /usr/local/bin/xh
             rm -rf /tmp/xh*
             ;;
     esac
@@ -345,7 +380,7 @@ else
             ;;
         ubuntu|debian|linuxmint|pop)
             curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg > /dev/null
-            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main" \
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main" \
                 | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
             sudo apt update && sudo apt install -y code
             ;;
@@ -358,6 +393,8 @@ fi
 info "Installing Google Chrome"
 if command_exists google-chrome-stable || command_exists google-chrome; then
     ok "Chrome already installed"
+elif [[ "$CHROME_LINUX_SUPPORTED" != "1" ]]; then
+    warn "Google Chrome Linux packages are not available for $(uname -m); skipping"
 else
     case "$DISTRO_ID" in
         fedora)
@@ -406,7 +443,7 @@ fi
 if command_exists codex; then
     ok "Codex CLI already installed"
 else
-    npm i -g @openai/codex@latest
+    curl -fsSL https://chatgpt.com/codex/install.sh | bash
     ok "Codex CLI installed"
 fi
 
@@ -422,13 +459,6 @@ if command_exists opencode; then
 else
     curl -fsSL https://opencode.ai/install | bash
     ok "OpenCode installed"
-fi
-
-if command_exists openclaw; then
-    ok "OpenClaw already installed"
-else
-    npm i -g openclaw@latest
-    ok "OpenClaw installed"
 fi
 
 # -- JetBrains Toolbox -------------------------------------------------------

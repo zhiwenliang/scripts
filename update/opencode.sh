@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 
 fetch_latest_opencode_version() {
-    fetch_latest_github_release_version "sst/opencode"
+    fetch_latest_github_release_version "anomalyco/opencode"
 }
 
 run_opencode_installer() {
@@ -18,10 +18,23 @@ run_opencode_installer() {
 update_opencode() {
     local name="OpenCode"
     local latest_version
+    local latest_version_raw
     local current_version="not installed"
 
     log_step "Checking" "$name"
-    latest_version="$(normalize_version "$(fetch_latest_opencode_version)")"
+    if ! latest_version_raw="$(fetch_latest_opencode_version)"; then
+        log_fail "$name latest version lookup failed"
+        track_failure "$name"
+        echo ""
+        return
+    fi
+    latest_version="$(normalize_version "$latest_version_raw")"
+    if [[ -z "$latest_version" ]]; then
+        log_fail "$name latest version lookup failed"
+        track_failure "$name"
+        echo ""
+        return
+    fi
 
     if command -v opencode >/dev/null 2>&1; then
         current_version="$(normalize_version "$(opencode --version | awk '{print $1}')")"

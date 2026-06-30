@@ -11,7 +11,7 @@ update_uipro() {
         "uipro" \
         "uipro-cli" \
         "npm list -g uipro-cli --depth=0 2>/dev/null | grep uipro-cli@ | sed 's/.*@//'" \
-        "npm update -g uipro-cli"
+        "npm install -g uipro-cli@latest"
 }
 
 if [[ "${AI_TOOLS_LIB_ONLY:-0}" != "1" ]]; then
