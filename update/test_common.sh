@@ -375,6 +375,19 @@ test_init_scripts_avoid_stale_linux_assets() {
     ! grep -qi 'openclaw' "${repo_root}/init/fedora.sh" || fail "bootstrap still contains OpenClaw"
 }
 
+test_removed_gemini_cli_updater() {
+    local repo_root
+
+    repo_root="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+    [[ ! -e "${SCRIPT_DIR}/gemini.sh" ]] || fail "Gemini update script still exists"
+    ! grep -E 'gemini|Gemini|@google/gemini-cli' \
+        "${repo_root}/init/fedora.sh" \
+        "${repo_root}/init/ubuntu.sh" \
+        "${repo_root}/update/ai_tools.sh" \
+        "${repo_root}/update/tui.sh" || fail "Gemini CLI updater is still referenced"
+}
+
 main() {
     test_update_npm_cli_exposes_managed_bin_when_external_command_masks_it
     test_uipro_uses_install_for_missing_package
@@ -388,6 +401,7 @@ main() {
     test_codex_installers_use_documented_non_interactive_mode
     test_hugo_uses_detected_linux_arch
     test_init_scripts_avoid_stale_linux_assets
+    test_removed_gemini_cli_updater
     echo "All update script tests passed."
 }
 

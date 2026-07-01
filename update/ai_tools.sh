@@ -9,7 +9,6 @@ AI_TOOLS_LIB_ONLY=1
 source "${SCRIPT_DIR}/claude_code.sh"
 source "${SCRIPT_DIR}/codex.sh"
 source "${SCRIPT_DIR}/copilot.sh"
-source "${SCRIPT_DIR}/gemini.sh"
 source "${SCRIPT_DIR}/opencode.sh"
 source "${SCRIPT_DIR}/openspec.sh"
 source "${SCRIPT_DIR}/pi.sh"
@@ -25,7 +24,6 @@ main() {
     update_claude_code
     update_codex
     update_copilot
-    update_gemini
     update_opencode
     update_openspec
     update_pi

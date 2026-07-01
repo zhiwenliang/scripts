@@ -447,13 +447,6 @@ else
     ok "Codex CLI installed"
 fi
 
-if command_exists gemini; then
-    ok "Gemini CLI already installed"
-else
-    npm i -g @google/gemini-cli@latest
-    ok "Gemini CLI installed"
-fi
-
 if command_exists opencode; then
     ok "OpenCode already installed"
 else
